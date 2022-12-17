@@ -24,5 +24,8 @@
     <ClCompile Include="common_class_of_dispel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="class_aat.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

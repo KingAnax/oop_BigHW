@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="class_aat.cpp" />
     <ClCompile Include="cmd_console_tools.cpp" />
     <ClCompile Include="common_class_of_dispel.cpp" />
     <ClCompile Include="common_input.cpp" />
