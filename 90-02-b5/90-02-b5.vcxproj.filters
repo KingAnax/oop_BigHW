@@ -15,20 +15,40 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cmd_console_tools.h">
+    <ClInclude Include="..\include\cmd_console_tools.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="common_input.h">
+    <ClInclude Include="..\include\common_input.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="common_class_of_dispel.h">
+    <ClInclude Include="90-02-b5.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="class_aat.h">
+    <ClInclude Include="..\include\cmd_gmw_tools.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="lib_aat_tools.h">
+    <ClInclude Include="..\include\cmd_file_menu.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\common\cmd_console_tools.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\common_input.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="90-02-b5-main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\cmd_gmw_tools.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\cmd_file_menu.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="90-02-b5-base.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

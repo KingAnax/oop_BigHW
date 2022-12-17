@@ -15,19 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cmd_console_tools.h">
+    <ClCompile Include="hw_check_main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\class_aat.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\class_aat.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="common_input.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="common_class_of_dispel.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="class_aat.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_aat_tools.h">
+    <ClInclude Include="hw_check.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
