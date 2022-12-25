@@ -51,5 +51,7 @@ void addition_line();
 void read_page_down(page& mypage, ifstream& fin);
 void roll_down_single(page& mypage, ifstream& fin);
 void roll_down_page(page& mypage, ifstream& fin);
-void goto_line(page& mypage, ifstream& fin, int size);
+void roll_up_single(page& mypage, ifstream& fin);
+void roll_up_page(page& mypage, ifstream& fin);
+void goto_line(page& mypage, ifstream& fin, int size, int pos = -1);
 void change_format(page& mypage, ifstream& fin);

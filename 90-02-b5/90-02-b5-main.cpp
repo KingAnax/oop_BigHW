@@ -10,6 +10,7 @@ int main()
 {
 	while (1) {
 		string file_name;
+		//调用文件选择器
 		list_board(file_name, path, to_search, 4);
 		Sleep(500);
 
@@ -29,6 +30,7 @@ int main()
 			continue;
 		}
 
+		//判断大小
 		int size = file_size(fin);
 		if (size > max_size) {
 			cout << "文件太大，无法打开!!!" << endl;
@@ -36,6 +38,7 @@ int main()
 			continue;
 		}
 
+		//判断位置的合理性
 		if (mypage.start_pos > size || mypage.start_pos < 0)
 			mypage.start_pos = 0;
 
@@ -45,16 +48,20 @@ int main()
 		//画框架
 		draw_frame();
 		addition_line();
-		//显示阅读界面并进行操作
+		//显示阅读界面
 		while (1) {
 			show_page(mypage, fin);
 			info_line(mypage.end_pos, file_name, size);
 			int MX = 0, MY = 0, MAction = 0, keycode1 = 0, keycode2 = 0;
 			bool flag_read = false;
+			//循环读入操作
 			while (1) {
 				my_read_keyboard(keycode1, keycode2);
 				if (keycode1 == 224) {
 					if (keycode2 == KB_ARROW_UP) {//上箭头
+						if (mypage.start_pos == 0 || mypage.line_num < page_height)
+							continue;
+						roll_up_single(mypage, fin);
 						break;
 					}
 					else if (keycode2 == KB_ARROW_DOWN) {//下箭头
@@ -65,6 +72,9 @@ int main()
 						break;
 					}
 					else if (keycode2 == KB_PAGE_UP) {//pgup
+						if (mypage.start_pos == 0 || mypage.line_num < page_height)
+							continue;
+						roll_up_page(mypage, fin);
 						break;
 					}
 					else if (keycode2 == KB_PAGE_DOWN) {//pgdn

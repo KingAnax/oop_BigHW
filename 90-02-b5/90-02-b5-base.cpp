@@ -36,7 +36,8 @@ void write_sav(int start_pos, const char* sav_name, string file_name)
 	bool flag_is_exist = false;
 	if (!in.fail()) {
 		while (getline(in, str)) {
-			temp << str << endl;
+			if(str.length() > 0)
+				temp << str << endl;
 			if (str == file_name) {
 				flag_is_exist = true;
 				in >> pos;
@@ -214,37 +215,24 @@ void roll_down_page(page& mypage, ifstream& fin)
 
 void roll_up_single(page& mypage, ifstream& fin)
 {
-	if (mypage.start_pos == 0)
-		return;
-
-	string temp_line = "";
-
-	int count = 0;
-
-	if (fin.eof())
-		fin.clear();
-
-
-
-	while (fin.tellg() != 0 && count < page_width) {
-		fin.seekg(-1, ios::cur);
-		char ch = fin.peek();
-		temp_line = ch + temp_line;
-		++count;
-	}
-
-	//循环移动信息
-	for (int i = page_height - 1; i > 0 ; --i)
-		mypage.myline[i] = mypage.myline[i - 1];
-
-	mypage.myline[0].content = temp_line;
+	goto_line(mypage, fin, -1, mypage.myline[page_height - 1].line_first_pos);
 }
 
-void goto_line(page& mypage, ifstream& fin, int size)
+void roll_up_page(page& mypage, ifstream& fin)
 {
-	cct_gotoxy(0, 3 + page_height);
-	int temp_pos = tp(size);
-	clear_status_line(3 + page_height);
+	goto_line(mypage, fin, -1, mypage.myline[1].line_first_pos);
+}
+
+void goto_line(page& mypage, ifstream& fin, int size, int pos)
+{
+	int temp_pos;
+	if (pos == -1) {
+		cct_gotoxy(0, 3 + page_height);
+		temp_pos = tp(size);
+		clear_status_line(3 + page_height);
+	}
+	else
+		temp_pos = pos;
 	if (fin.eof())
 		fin.clear();
 	fin.seekg(0, ios::beg);
@@ -265,9 +253,5 @@ void goto_line(page& mypage, ifstream& fin, int size)
 void change_format(page& mypage, ifstream& fin)
 {
 	mypage.show_format = 1 - mypage.show_format;
-	if (fin.eof())
-		fin.clear();
-	fin.seekg(mypage.start_pos, ios::beg);
-	mypage.start_no = 0;
-	read_page_down(mypage, fin);
+	goto_line(mypage, fin, -1, mypage.myline[page_height - 1].line_first_pos);
 }
