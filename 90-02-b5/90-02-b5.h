@@ -19,13 +19,11 @@ using namespace std;
 
 //有字部分尺寸
 #define page_height 16
-#define page_width  72
+#define page_width  70
 
 //定义一行信息
 struct line_info {
 	string content = "";
-	bool is_prv_CR = 0;     //是否为新行开始
-	bool is_add_blank = 0;  //添加空格
 	int line_first_pos = 0;
 };
 
@@ -35,7 +33,7 @@ struct page {
 	bool is_end = false;
 	int start_pos = 0;
 	int end_pos = 0;
-	int show_format = 0; //0是自动缩进，1是不自动
+	int show_format = 0; //0是自动缩进，1是补行
 	int start_no = 0;
 	int line_num = page_height;
 	line_info myline[page_height + 1]; //从0开始，最后一行记录之前信息
@@ -48,10 +46,10 @@ void draw_frame();
 void info_line(int pos, string file_name, int size);
 void clear_status_line(int y);
 void addition_line();
-void read_page_down(page& mypage, ifstream& fin);
+void read_page(page& mypage, ifstream& fin);
 void roll_down_single(page& mypage, ifstream& fin);
 void roll_down_page(page& mypage, ifstream& fin);
 void roll_up_single(page& mypage, ifstream& fin);
 void roll_up_page(page& mypage, ifstream& fin);
-void goto_line(page& mypage, ifstream& fin, int size, int pos = -1);
+void goto_line(page& mypage, ifstream& fin, int size, int pos = -2);
 void change_format(page& mypage, ifstream& fin);

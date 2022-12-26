@@ -16,7 +16,6 @@ int main()
 
 		bool flag_quit = false;
 		struct page mypage;
-		mypage.show_format = 1;
 
 		/*这里先读取配置文件*/
 		mypage.start_pos = read_sav(sav_name, file_name);
@@ -43,7 +42,7 @@ int main()
 			mypage.start_pos = 0;
 
 		fin.seekg(mypage.start_pos, ios::beg);
-		read_page_down(mypage, fin);
+		read_page(mypage, fin);
 
 		//画框架
 		draw_frame();
@@ -103,6 +102,8 @@ int main()
 					break;
 				}
 			}
+			if (mypage.end_pos == -1)
+				mypage.end_pos = size;
 			if (flag_read)
 				break;
 		}

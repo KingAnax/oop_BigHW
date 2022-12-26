@@ -115,63 +115,76 @@ void draw_frame()
 	cout << "╝" << endl;
 }
 
-void read_page_down(page& mypage, ifstream& fin)
+void read_page(page& mypage, ifstream& fin)
 {
 	int i;
 	//从指定行号开始，目前不需要结束的行号
 	for (i = mypage.start_no; i < page_height && !fin.eof(); ++i) {
+		/*初始化*/
 		mypage.myline[i].line_first_pos = (int)fin.tellg();
 		mypage.myline[i].content = "";
-		int line_length = page_width;
-		int length = 0;
-		if (mypage.show_format == 0) { //自动缩进,补空格
-			if (mypage.myline[i].is_prv_CR) {
-				if (fin.peek() != ' ' && fin.peek() != '\t' && fin.peek() != 0xA1) {
-					length = 4;
-					line_length = page_width - 4; //补四个空格
-					mypage.myline[i].content += "    ";
+		int line_length = page_width; //一行的上限长度
+		int length = 0; //记录一行的长度
+		int ch_count = 0; //记录中文字符
+		bool is_read_CR = false; //记录是否读到换行
+		/*处理前导空格*/
+		if (mypage.show_format == 0) {
+			if (fin.peek() != ' ' && fin.peek() != '\t' && fin.peek() != 0xA1 && fin.tellg() != 0) {
+				fin.seekg(-1, ios::cur);
+				if (fin.peek() == '\n') {
+					line_length -= 4;
+					for (int j = 0; j < 4; ++j)
+						mypage.myline[i].content += (char)0xA1;
+					fin.seekg(2, ios::cur);
 				}
+				else
+					fin.seekg(1, ios::cur);
 			}
 		}
-		int ch_count = 0; //记录中文字符
-		int flag_read_CR = false;
+		/*开始读一行*/
 		for (int j = 0; j < line_length; ++j) {
 			char ch;
 			fin.get(ch);
-			if (fin.fail())
+			//eof
+			if (fin.eof())
 				break;
+			//\n
 			if (ch == '\n') {
-				mypage.myline[i + 1].is_prv_CR = 1;
-				flag_read_CR = true;
-				break;
+				is_read_CR = true;
+				if (mypage.show_format == 1) {
+					if (length == 0)
+						break;
+					if (fin.peek() != ' ' && fin.peek() != '\t' && fin.peek() != 0xA1) {
+						--j;
+						continue;
+					}
+					else
+						break;
+				}
+				if(mypage.show_format == 0){
+					break;
+				}
 			}
-			if (ch == '\r') {
-				flag_read_CR = true;
-				if (fin.peek() == '\n')
-					fin >> ch;
-				mypage.myline[i + 1].is_prv_CR = 1;
-				break;
-			}
+			is_read_CR = false;
+			//加上字符
 			mypage.myline[i].content += ch;
+			++length;
+			//判断中文字符
 			if (ch < 0)
 				++ch_count;
-			++length;
 		}
+		/*判断中文字符奇数*/
 		if (ch_count % 2 && mypage.myline[i].content[length - 1] < 0) {
 			mypage.myline[i].content[length - 1] = '\0';
 			fin.seekg(-1, ios::cur);
 		}
-		else if (!flag_read_CR) {
-			if (fin.peek() == '\r') {
-				mypage.myline[i + 1].is_prv_CR = 1;
-				fin.seekg(3, ios::cur);
-			}
-			else if (fin.peek() == '\n') {
-				mypage.myline[i + 1].is_prv_CR = 1;
+		/*删除行尾多余换行*/
+		if (!is_read_CR) {
+			if (fin.peek() == '\n')
 				fin.seekg(2, ios::cur);
-			}
 		}
 	}
+	/*更改下mypage信息*/
 	mypage.line_num = i;
 	mypage.end_pos = (int)fin.tellg();
 	mypage.start_pos = mypage.myline[0].line_first_pos;
@@ -201,7 +214,7 @@ void roll_down_single(page& mypage, ifstream& fin)
 
 	//读一行
 	mypage.start_no = page_height - 1;
-	read_page_down(mypage, fin);
+	read_page(mypage, fin);
 }
 
 void roll_down_page(page& mypage, ifstream& fin)
@@ -226,7 +239,7 @@ void roll_up_page(page& mypage, ifstream& fin)
 void goto_line(page& mypage, ifstream& fin, int size, int pos)
 {
 	int temp_pos;
-	if (pos == -1) {
+	if (pos == -2) {
 		cct_gotoxy(0, 3 + page_height);
 		temp_pos = tp(size);
 		clear_status_line(3 + page_height);
@@ -238,20 +251,22 @@ void goto_line(page& mypage, ifstream& fin, int size, int pos)
 	fin.seekg(0, ios::beg);
 	//先读一页
 	mypage.start_no = 0;
-	read_page_down(mypage, fin);
+	read_page(mypage, fin);
 	//然后循环读一行
-	while (mypage.end_pos < temp_pos && !fin.eof())
-		roll_down_single(mypage, fin);
+	if (mypage.line_num >= page_height && mypage.end_pos != -1) {
+		while (mypage.end_pos < temp_pos && !fin.eof())
+			roll_down_single(mypage, fin);
+	}
 	//最后把显示界面读出来
 	if (fin.eof())
 		fin.clear();
 	fin.seekg(mypage.start_pos, ios::beg);
 	mypage.start_no = 0;
-	read_page_down(mypage, fin);
+	read_page(mypage, fin);
 }
 
 void change_format(page& mypage, ifstream& fin)
 {
 	mypage.show_format = 1 - mypage.show_format;
-	goto_line(mypage, fin, -1, mypage.myline[page_height - 1].line_first_pos);
+	goto_line(mypage, fin, -1, mypage.end_pos);
 }

@@ -20,16 +20,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\cmd_console_tools.h" />
-    <ClInclude Include="..\include\cmd_file_menu.h" />
     <ClInclude Include="..\include\cmd_gmw_tools.h" />
-    <ClInclude Include="..\include\common_input.h" />
+    <ClInclude Include="..\include\common_file_list_board.h" />
+    <ClInclude Include="..\include\common_file_opr.h" />
+    <ClInclude Include="..\include\common_my_gmw_tools.h" />
     <ClInclude Include="90-02-b5.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\cmd_console_tools.cpp" />
-    <ClCompile Include="..\common\cmd_file_menu.cpp" />
     <ClCompile Include="..\common\cmd_gmw_tools.cpp" />
-    <ClCompile Include="..\common\common_input.cpp" />
+    <ClCompile Include="..\common\common_file_list_board.cpp" />
+    <ClCompile Include="..\common\common_file_opr.cpp" />
+    <ClCompile Include="..\common\common_my_gmw_tools.cpp" />
     <ClCompile Include="90-02-b5-base.cpp" />
     <ClCompile Include="90-02-b5-main.cpp" />
   </ItemGroup>
